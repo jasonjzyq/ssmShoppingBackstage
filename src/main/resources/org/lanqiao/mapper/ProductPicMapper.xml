@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lanqiao.dao.ProductPicDao">
+  <resultMap id="ProductPicResult" type="org.lanqiao.entity.ProductPic">
+    <result column="pictureAddress" jdbcType="VARCHAR" property="pictureAddress" />
+    <result column="pictureType" jdbcType="VARCHAR" property="pictureType" />
+    <result column="productId" jdbcType="INTEGER" property="productId" />
+  </resultMap>
+  <insert id="insert" parameterType="org.lanqiao.entity.ProductPic">
+    insert into productpic (pictureAddress, pictureType, productId
+      )
+    values (#{pictureAddress,jdbcType=VARCHAR}, #{pictureType,jdbcType=VARCHAR}, #{productId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="org.lanqiao.entity.ProductPic">
+    insert into productpic
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pictureAddress != null">
+        pictureAddress,
+      </if>
+      <if test="pictureType != null">
+        pictureType,
+      </if>
+      <if test="productId != null">
+        productId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pictureAddress != null">
+        #{pictureAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="pictureType != null">
+        #{pictureType,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lanqiao.dao.RecordDao">
+  <resultMap id="RecordResult" type="org.lanqiao.entity.Record">
+    <result column="orderId" jdbcType="INTEGER" property="orderId" />
+    <result column="productId" jdbcType="INTEGER" property="productId" />
+    <result column="amount" jdbcType="INTEGER" property="amount" />
+  </resultMap>
+  <insert id="insert" parameterType="org.lanqiao.entity.Record">
+    insert into record (orderId, productId, amount
+      )
+    values (#{orderId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{amount,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="org.lanqiao.entity.Record">
+    insert into record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        orderId,
+      </if>
+      <if test="productId != null">
+        productId,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>

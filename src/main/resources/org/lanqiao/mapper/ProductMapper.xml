@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lanqiao.dao.ProductDao">
+	<resultMap id="ProductResult" type="org.lanqiao.entity.Product">
+		<id column="productId" jdbcType="INTEGER" property="productId" />
+		<result column="productName" jdbcType="VARCHAR" property="productName" />
+		<result column="price" jdbcType="REAL" property="price" />
+		<result column="describe" jdbcType="VARCHAR" property="describe" />
+		<result column="inventory" jdbcType="INTEGER" property="inventory" />
+		<result column="productPic" jdbcType="VARCHAR" property="productPic" />
+		<association property="type" resultMap="TypeResult"></association>
+	</resultMap>
+	<resultMap id="TypeResult" type="org.lanqiao.entity.Type">
+		<id column="typeId" jdbcType="INTEGER" property="typeId" />
+		<result column="typeName" jdbcType="VARCHAR" property="typeName" />
+		<result column="parentType" jdbcType="INTEGER" property="parentType" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		productId, productName, price, describe, inventory,
+		productPic, typeId
+	</sql>
+
+	<!-- 查询所有商品 -->
+	<select id="selectAllProducts" parameterType="java.lang.Integer" resultMap="ProductResult">
+		select * from product p LEFT JOIN type t on p.typeId = t.typeId limit #{begin,jdbcType=VARCHAR},#{size,jdbcType=VARCHAR}
+	</select>
+	<!-- 查询所有商品 -->
+	<select id="selectAllProductsR" resultMap="ProductResult">
+		select * from product p;
+	</select>
+	<!-- 添加商品 -->
+	<insert id="insertProduct" parameterType="org.lanqiao.entity.Product"
+		useGeneratedKeys="true" keyProperty="productId">
+		insert into product
+		(productName,
+		price,
+		product.`describe`, inventory,
+		productPic,
+		typeId)
+		values (
+		#{productName,jdbcType=VARCHAR},
+		<!-- #{price,jdbcType=REAL}, -->
+		#{price,jdbcType=REAL},
+		#{describe,jdbcType=VARCHAR},
+		#{inventory,jdbcType=INTEGER},
+		#{productPic,jdbcType=VARCHAR},
+		#{type.typeId,jdbcType=INTEGER})
+	</insert>
+	<!-- 更新商品 -->
+	<update id="updateProduct" parameterType="org.lanqiao.entity.Product">
+		update product
+		set
+		productName = #{productName,jdbcType=VARCHAR},
+		price =
+		<!-- #{price,jdbcType=REAL}, -->
+		#{price,jdbcType=REAL},
+		product.`describe` = #{describe,jdbcType=VARCHAR},
+		inventory = #{inventory,jdbcType=INTEGER},
+		productPic =
+		#{productPic,jdbcType=VARCHAR},
+		typeId =
+		#{type.typeId,jdbcType=INTEGER}
+		where productId =
+		#{productId,jdbcType=INTEGER}
+	</update>
+	<!-- 删除商品 -->
+	<delete id="deleteProduct" parameterType="java.lang.Integer">
+		delete from
+		product
+		where productId = #{productId,jdbcType=INTEGER}
+	</delete>
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="ProductResult">
+		select
+		<include refid="Base_Column_List" />
+		from product
+		where productId = #{productId,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		product
+		where productId = #{productId,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="org.lanqiao.entity.Product">
+		insert into product
+		(productId, productName, price,
+		describe, inventory, productPic,
+		typeId)
+		values (#{productId,jdbcType=INTEGER},
+		#{productName,jdbcType=VARCHAR},
+		#{price,jdbcType=REAL},
+		#{describe,jdbcType=VARCHAR}, #{inventory,jdbcType=INTEGER},
+		#{productPic,jdbcType=VARCHAR},
+		#{type.typeId,jdbcType=INTEGER})
+	</insert>
+	<insert id="insertSelective" parameterType="org.lanqiao.entity.Product">
+		insert into product
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="productId != null">
+				productId,
+			</if>
+			<if test="productName != null">
+				productName,
+			</if>
+			<if test="price != null">
+				price,
+			</if>
+			<if test="describe != null">
+				describe,
+			</if>
+			<if test="inventory != null">
+				inventory,
+			</if>
+			<if test="productPic != null">
+				productPic,
+			</if>
+			<if test="typeId != null">
+				typeId,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="productId != null">
+				#{productId,jdbcType=INTEGER},
+			</if>
+			<if test="productName != null">
+				#{productName,jdbcType=VARCHAR},
+			</if>
+			<if test="price != null">
+				#{price,jdbcType=REAL},
+			</if>
+			<if test="describe != null">
+				#{describe,jdbcType=VARCHAR},
+			</if>
+			<if test="inventory != null">
+				#{inventory,jdbcType=INTEGER},
+			</if>
+			<if test="productPic != null">
+				#{productPic,jdbcType=VARCHAR},
+			</if>
+			<if test="typeId != null">
+				#{type.typeId,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="org.lanqiao.entity.Product">
+		update product
+		<set>
+			<if test="productName != null">
+				productName = #{productName,jdbcType=VARCHAR},
+			</if>
+			<if test="price != null">
+				price = #{price,jdbcType=REAL},
+			</if>
+			<if test="describe != null">
+				describe = #{describe,jdbcType=VARCHAR},
+			</if>
+			<if test="inventory != null">
+				inventory = #{inventory,jdbcType=INTEGER},
+			</if>
+			<if test="productPic != null">
+				productPic = #{productPic,jdbcType=VARCHAR},
+			</if>
+			<if test="typeId != null">
+				typeId = #{type.typeId,jdbcType=INTEGER},
+			</if>
+		</set>
+		where productId = #{productId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="org.lanqiao.entity.Product">
+		update product
+		set
+		productName = #{productName,jdbcType=VARCHAR},
+		price =
+		#{price,jdbcType=REAL},
+		describe = #{describe,jdbcType=VARCHAR},
+		inventory = #{inventory,jdbcType=INTEGER},
+		productPic =
+		#{productPic,jdbcType=VARCHAR},
+		typeId =
+		#{type.typeId,jdbcType=INTEGER}
+		where productId =
+		#{productId,jdbcType=INTEGER}
+	</update>
+</mapper>
